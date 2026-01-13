@@ -1,0 +1,13 @@
+name: self-hosted test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: self-hosted
+    steps:
+      - name: Who am I
+        run: |
+          whoami
+          pwd
+          id
