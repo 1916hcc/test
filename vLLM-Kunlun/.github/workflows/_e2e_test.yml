@@ -1,0 +1,173 @@
+name: 'e2e-test'
+
+on:
+  workflow_call:
+    inputs:
+      vllm:
+        required: true
+        type: string
+      runner:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+      type:
+        required: true
+        type: string
+      vllm-kunlun:
+        required: true
+        type: string
+
+
+jobs:
+  e2e:
+    name: singlecard
+    runs-on: ${{ inputs.runner }}
+    container:
+      image: ${{ inputs.image }}
+      env:
+        VLLM_LOGGING_LEVEL: ERROR
+        VLLM_USE_MODELSCOPE: True
+        TRANSFORMERS_OFFLINE: 1
+    steps:
+      - name: Set python310_torch25_cuda as global env
+        run: |
+          ENV=/root/miniconda/envs/python310_torch25_cuda
+          echo "PATH=$ENV/bin:$PATH" >> $GITHUB_ENV
+
+
+
+
+      - name: Check xpu and CANN info
+        run: |
+          xpu-smi
+          # cat /usr/local/Ascend/ascend-toolkit/latest/"$(uname -i)"-linux/ascend_toolkit_install.info
+
+      - name: Config mirrors
+        run: |
+          apt-get update -y
+          
+
+      - name: Checkout baidu/vllm-kunlun repo
+        uses: actions/checkout@v4
+        with:
+          repository: baidu/vllm-kunlun
+          ref: ${{ inputs.vllm-kunlun }}
+          path: ./vLLM-Kunlun
+          fetch-depth: 1
+      - name: Install system dependencies
+        run: |
+          # apt-get -y install `cat packages.txt`
+          apt-get -y install gcc g++ cmake libnuma-dev
+
+      - name: Checkout vllm-project/vllm repo
+        uses: actions/checkout@v4
+        with:
+          repository: vllm-project/vllm
+          ref: ${{ inputs.vllm }}
+          path: ./vllm
+          fetch-depth: 1
+
+      - name: Install vllm-project/vllm from source
+        working-directory: ./vllm
+        run: |
+          source /root/miniconda/etc/profile.d/conda.sh
+          conda activate python310_torch25_cuda
+          VLLM_TARGET_DEVICE=empty pip install -e .
+
+      - name: Install vllm-project/vllm-kunlun
+        #env:
+          #PIP_EXTRA_INDEX_URL: https://mirrors.huaweicloud.com/ascend/repos/pypi
+        run: |
+          ls
+          cd ./vLLM-Kunlun
+          pip install -r requirements.txt
+
+          python setup.py build
+          python setup.py install
+
+          cp vllm_kunlun/patches/eval_frame.py /root/miniconda/envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
+
+          wget https://klx-sdk-release-public.su.bcebos.com/xpytorch/release/3.3.1.0/xpytorch-cp310-torch251-ubuntu2004-x64.run
+          bash xpytorch-cp310-torch251-ubuntu2004-x64.run
+
+          pip install \
+          https://cce-ai-models.bj.bcebos.com/v1/dongxinyu03/vllm/output/xtorch_ops-0.1.1799%2Bdbdeb408-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKxPW2jzoJUuFZmI19s3yry%2F2025-11-12T07%3A05%3A11Z%2F-1%2Fhost%2F3e2794925d2f8b6985db354990a435e3afd08f6be99e090d37a49ac199692c4a
+
+          pip install \
+          https://cce-ai-models.bj.bcebos.com/liangyucheng/xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKxPW2jzoJUuFZmI19s3yry%2F2025-11-11T08%3A07%3A58Z%2F2592000%2Fhost%2Ffd6e7abdb611ad3911e42703ab5c4f8da945c8a404ed9652104203faaa66f080
+
+          chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
+      
+      - name: Install evalscope && evalscope[perf]
+        run: |
+          export {http,https}_proxy=http://10.162.37.16:8128
+          export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+          pip install evalscope
+          pip install 'evalscope[perf]'
+      - name: run Qwen2.5-7B server
+        run: |
+          unset XPU_DUMMY_EVENT
+          export XPU_USE_MOE_SORTED_THRES=1
+          export XPU_VISIBLE_DEVICES=6,7
+          export XFT_USE_FAST_SWIGLU=1
+          export XMLIR_CUDNN_ENABLED=1
+          export XPU_USE_DEFAULT_CTX=1
+          export XMLIR_FORCE_USE_XPU_GRAPH=1
+          export XPU_USE_FAST_SWIGLU=1
+          export VLLM_HOST_IP=$(hostname -i)
+          echo "VLLM_HOST_IP: $VLLM_HOST_IP"
+          export XMLIR_ENABLE_MOCK_TORCH_COMPILE=false
+          nohup USE_ORI_ROPE=1 VLLM_USE_V1=1 python -m vllm.entrypoints.openai.api_server \
+                --host 0.0.0.0 \
+                --port 8356 \
+                --model /ssd1/models/Qwen2.5-7B \
+                --gpu-memory-utilization 0.8 \
+                --trust-remote-code \
+                --max-model-len 8192 \
+                --tensor-parallel-size 1 \
+                --dtype float16 \
+                --max_num_seqs 2048 \
+                --max_num_batched_tokens 8192 \
+                --max-seq-len-to-capture 8192 \
+                --block-size 128 \
+                --no-enable-prefix-caching \
+                --no-enable-chunked-prefill \
+                --distributed-executor-backend mp \
+                --served-model-name Qwen2.5-7B \
+                --compilation-config '{"splitting_ops": ["vllm.unified_attention_with_output_kunlun"]}' \
+                > server.log 2>&1 &
+      
+      - name: wait for vLLM server ready
+        run: |
+          for i in {1..60}; do
+            if curl -sf http://localhost:8356/v1/models > /dev/null; then
+              echo "vLLM server is ready"
+              exit 0
+            fi
+            echo "waiting for vLLM server..."
+            sleep 5
+          done
+
+          echo "vLLM server failed to start"
+          exit 1
+      - name: Accuracy testing
+        run: |
+          evalscope eval \
+            --model Qwen2.5-7B \
+            --api-url http://localhost:8356/v1 \
+            --datasets gsm8k arc \
+            --limit 10
+
+
+      - name: Performerance testing
+        run: |
+          evalscope perf \
+            --model Qwen2.5-7B \
+            --url "http://localhost:8356/v1/chat/completions" \
+            --parallel 5 \
+            --number 20 \
+            --api openai \
+            --dataset openqa \
+            --stream
