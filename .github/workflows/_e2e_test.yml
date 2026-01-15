@@ -27,12 +27,6 @@ jobs:
       - self-hosted
       - Linux
       - X64
-    container:
-      image: ${{ inputs.image }}
-      env:
-        VLLM_LOGGING_LEVEL: ERROR
-        VLLM_USE_MODELSCOPE: True
-        TRANSFORMERS_OFFLINE: 1
     steps:
       - name: Set python310_torch25_cuda as global env
         run: |
@@ -47,9 +41,9 @@ jobs:
           xpu-smi
           # cat /usr/local/Ascend/ascend-toolkit/latest/"$(uname -i)"-linux/ascend_toolkit_install.info
 
-      - name: Config mirrors
-        run: |
-          apt-get update -y
+      # - name: Config mirrors
+      #   run: |
+      #     apt-get update -y
           
 
       - name: Checkout baidu/vllm-kunlun repo
