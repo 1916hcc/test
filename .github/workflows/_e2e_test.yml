@@ -23,7 +23,10 @@ on:
 jobs:
   e2e:
     name: singlecard
-    runs-on: ${{ inputs.runner }}
+    runs-on: 
+      - self-hosted
+      - Linux
+      - X64
     container:
       image: ${{ inputs.image }}
       env:
