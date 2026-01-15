@@ -62,6 +62,7 @@ jobs:
         run: |
           source /root/miniconda/etc/profile.d/conda.sh
           conda activate python310_torch25_cuda
+          conda env list
           pip install vllm==${{ inputs.vllm }}
 
       - name: Install vllm-project/vllm-kunlun
