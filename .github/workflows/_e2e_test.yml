@@ -71,7 +71,7 @@ jobs:
         run: |
           source /root/miniconda/etc/profile.d/conda.sh
           conda activate python310_torch25_cuda
-          VLLM_TARGET_DEVICE=empty pip install -e .
+          VLLM_TARGET_DEVICE=empty pip install -e . --no-build-isolation
 
       - name: Install vllm-project/vllm-kunlun
         #env:
