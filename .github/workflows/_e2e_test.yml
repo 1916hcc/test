@@ -58,20 +58,11 @@ jobs:
       #     # apt-get -y install `cat packages.txt`
       #     apt-get -y install gcc g++ cmake libnuma-dev
 
-      - name: Checkout vllm-project/vllm repo
-        uses: actions/checkout@v4
-        with:
-          repository: vllm-project/vllm
-          ref: ${{ inputs.vllm }}
-          path: ./vllm
-          fetch-depth: 1
-
-      - name: Install vllm-project/vllm from source
-        working-directory: ./vllm
+      - name: Install vllm from PyPI
         run: |
           source /root/miniconda/etc/profile.d/conda.sh
           conda activate python310_torch25_cuda
-          VLLM_TARGET_DEVICE=empty pip install -e . --no-build-isolation
+          pip install vllm==${{ inputs.vllm }}
 
       - name: Install vllm-project/vllm-kunlun
         #env:
