@@ -99,6 +99,17 @@ jobs:
 
           #chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
       
+
+      - name: enviroment
+        run: |
+          ls -l /usr/local/bin/xpu-smi
+      - name: Install evalscope && evalscope[perf]
+        run: |
+          export {http,https}_proxy=http://10.162.37.16:8128
+          export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+          pip install evalscope
+          pip install 'evalscope[perf]'
+         
       - name: Install evalscope && evalscope[perf]
         run: |
           export {http,https}_proxy=http://10.162.37.16:8128
