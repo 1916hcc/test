@@ -118,7 +118,9 @@ jobs:
           export VLLM_HOST_IP=$(hostname -i)
           echo "VLLM_HOST_IP: $VLLM_HOST_IP"
           export XMLIR_ENABLE_MOCK_TORCH_COMPILE=false
-          nohup USE_ORI_ROPE=1 VLLM_USE_V1=1 python -m vllm.entrypoints.openai.api_server \
+          USE_ORI_ROPE=1
+          VLLM_USE_V1=1
+          nohup python -m vllm.entrypoints.openai.api_server \
                 --host 0.0.0.0 \
                 --port 8356 \
                 --model /ssd1/models/Qwen2.5-7B \
@@ -139,7 +141,7 @@ jobs:
                 > server.log 2>&1 &
       - name: Stream server logs
         run: |
-          tail -f server.log
+          nohup tail -f server.log &
       
       - name: wait for vLLM server ready
         run: |
