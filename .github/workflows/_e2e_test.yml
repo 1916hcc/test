@@ -83,7 +83,8 @@ jobs:
           /root/miniconda/envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
 
       - name: Install the KL3-customized build of PyTorch(Only MIMO V2)
-        run: 
+        run:
+          unset http_proxy&&unset https_proxy 
           wget -O xpytorch-cp310-torch251-ubuntu2004-x64.run https://klx-sdk-release-public.su.bcebos.com/kunlun2aiak_output/1231/xpytorch-cp310-torch251-ubuntu2004-x64.run
       
       - name: Install custom ops
