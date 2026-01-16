@@ -95,8 +95,8 @@ jobs:
       - name: Install custom ops(Only MIMO V2)
         run: |
           unset http_proxy&&unset https_proxy;
-          wget -O xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
-          pip install xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
+          wget -O xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
+          pip install xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl
       
       - name: Install the KLX3 custom Triton build && Install the AIAK custom ops library
         run: |
