@@ -108,6 +108,7 @@ jobs:
       - name: run Qwen2.5-7B server
         run: |
           unset XPU_DUMMY_EVENT
+          export LD_LIBRARY_PATH=/opt/xpu/lib:$LD_LIBRARY_PATH
           export XPU_USE_MOE_SORTED_THRES=1
           export XPU_VISIBLE_DEVICES=6,7
           export XFT_USE_FAST_SWIGLU=1
