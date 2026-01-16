@@ -87,7 +87,7 @@ jobs:
           #wget https://klx-sdk-release-public.su.bcebos.com/xpytorch/release/3.3.1.0/xpytorch-cp310-torch251-ubuntu2004-x64.run
           #sudo bash xpytorch-cp310-torch251-ubuntu2004-x64.run
 
-          #pip install \
+          pip install \
           https://cce-ai-models.bj.bcebos.com/v1/dongxinyu03/vllm/output/xtorch_ops-0.1.1799%2Bdbdeb408-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKxPW2jzoJUuFZmI19s3yry%2F2025-11-12T07%3A05%3A11Z%2F-1%2Fhost%2F3e2794925d2f8b6985db354990a435e3afd08f6be99e090d37a49ac199692c4a
 
           pip install \
