@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Set python310_torch25_cuda as global env
         run: |
-          ENV=/root/miniconda/envs/python310_torch25_cuda
+          ENV=/home/huchenchao/my_conda_envs/python310_torch25_cuda
           echo "PATH=$ENV/bin:$PATH" >> $GITHUB_ENV
 
 
@@ -39,6 +39,8 @@ jobs:
       - name: Check xpu and CANN info
         run: |
           xpu-smi
+          which python
+          python -V
           # cat /usr/local/Ascend/ascend-toolkit/latest/"$(uname -i)"-linux/ascend_toolkit_install.info
 
       # - name: Config mirrors
