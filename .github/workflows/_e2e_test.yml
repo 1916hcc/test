@@ -67,11 +67,9 @@ jobs:
           
           
           export {http,https}_proxy=http://agent.baidu.com:8891
-          pip install vllm==${{ inputs.vllm }} 
+          pip install vllm==${{ inputs.vllm }} --no-deps
 
       - name: Install vllm-project/vllm-kunlun
-        #env:
-          #PIP_EXTRA_INDEX_URL: https://mirrors.huaweicloud.com/ascend/repos/pypi
         run: |
           ls
           cd ./vLLM-Kunlun
