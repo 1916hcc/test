@@ -73,7 +73,7 @@ jobs:
         run: |
           ls
           cd ./vLLM-Kunlun
-          unset http_proxy&&unset https_proxy
+          unset http_proxy&&unset https_proxy;
           pip install -r requirements.txt
 
           python setup.py build
