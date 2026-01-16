@@ -81,7 +81,8 @@ jobs:
           python setup.py build
           python setup.py install
 
-          cp vllm_kunlun/patches/eval_frame.py /root/miniconda/envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
+          cp vllm_kunlun/patches/eval_frame.py \
+          /home/huchenchao/my_conda_envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
 
           wget https://klx-sdk-release-public.su.bcebos.com/xpytorch/release/3.3.1.0/xpytorch-cp310-torch251-ubuntu2004-x64.run
           bash xpytorch-cp310-torch251-ubuntu2004-x64.run
