@@ -123,7 +123,8 @@ jobs:
       
 
 
-      - name: run Qwen2.5-7B server
+      - name: run Qwen2.5-7B 
+        shell: bash
         run: |
           unset XPU_DUMMY_EVENT
           export LD_LIBRARY_PATH=/opt/xpu/lib:$LD_LIBRARY_PATH
