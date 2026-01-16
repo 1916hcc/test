@@ -95,13 +95,16 @@ jobs:
       - name: Install custom ops(Only MIMO V2)
         run: |
           unset http_proxy&&unset https_proxy;
-          pip install "https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl"
+          wget -O xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
+          pip install xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
       
       - name: Install the KLX3 custom Triton build && Install the AIAK custom ops library
         run: |
           unset http_proxy&&unset https_proxy;
-          pip install "https://cce-ai-models.bj.bcebos.com/v1/vllm-kunlun-0.11.0/triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl"
-          pip install "https://cce-ai-models.bj.bcebos.com/XSpeedGate-whl/release_merge/20251219_152418/xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl"
+          wget -O triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/v1/vllm-kunlun-0.11.0/triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
+          pip install triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
+          wget -O xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/XSpeedGate-whl/release_merge/20251219_152418/xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
+          pip install xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
       - name: Install evalscope && evalscope[perf]
         run: |
           
