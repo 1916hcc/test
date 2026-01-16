@@ -65,9 +65,9 @@ jobs:
           which python
           python -V
           
-          #unset http_proxy&&unset https_proxy
+          
           export {http,https}_proxy=http://agent.baidu.com:8891
-          pip install vllm==0.10.1.1 --no-build-isolation --no-deps --index-url https://pip.baidu-int.com/simple/
+          pip install vllm==${{ inputs.vllm }} 
 
       - name: Install vllm-project/vllm-kunlun
         #env:
