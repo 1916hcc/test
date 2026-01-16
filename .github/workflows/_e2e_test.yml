@@ -90,7 +90,8 @@ jobs:
       - name: Install custom ops
         run: |
           unset http_proxy&&unset https_proxy;
-          pip install "https://baidu-kunlun-public.su.bcebos.com/v1/baidu-kunlun-share/1130/xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKypXxBzU7gg4Mk4K4c6OYR%2F2025-12-05T06%3A18%3A00Z%2F-1%2Fhost%2F14936c2b7e7c557c1400e4c467c79f7a9217374a7aa4a046711ac4d948f460cd"
+          wget -O xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl https://baidu-kunlun-public.su.bcebos.com/v1/baidu-kunlun-share/1130/xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKypXxBzU7gg4Mk4K4c6OYR%2F2025-12-05T06%3A18%3A00Z%2F-1%2Fhost%2F14936c2b7e7c557c1400e4c467c79f7a9217374a7aa4a046711ac4d948f460cd
+          pip install xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl
       - name: Install custom ops(Only MIMO V2)
         run: |
           unset http_proxy&&unset https_proxy;
