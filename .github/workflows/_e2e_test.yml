@@ -103,9 +103,7 @@ jobs:
       - name: enviroment
         run: |
           ls -l /usr/local/bin/xpu-smi
-          which python
-          sys.executable
-          has skip_code
+          
       - name: Install evalscope && evalscope[perf]
         run: |
           export {http,https}_proxy=http://10.162.37.16:8128
