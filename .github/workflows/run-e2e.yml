@@ -7,7 +7,7 @@ jobs:
   call-e2e:
     uses: ./.github/workflows/_e2e_test.yml
     with:
-      vllm: v0.10.1.1
+      vllm: 0.10.1.1
       vllm-kunlun: v0.10.1.1
       runner: gajl-bbc-onlinec-com-1498363
       image: iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32

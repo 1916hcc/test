@@ -63,7 +63,7 @@ jobs:
           source /root/miniconda/etc/profile.d/conda.sh
           conda activate python310_torch25_cuda
           conda env list
-          export {http,https}_proxy=http://10.162.37.16:8128
+          export {http,https}_proxy=http://agent.baidu.com:8891
           sudo pip install vllm==${{ inputs.vllm }}
 
       - name: Install vllm-project/vllm-kunlun
