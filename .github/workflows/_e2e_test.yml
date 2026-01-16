@@ -84,7 +84,7 @@ jobs:
 
       - name: Install the KL3-customized build of PyTorch(Only MIMO V2)
         run:
-          unset http_proxy&&unset https_proxy 
+          unset http_proxy&&unset https_proxy; 
           wget -O xpytorch-cp310-torch251-ubuntu2004-x64.run \
           https://klx-sdk-release-public.su.bcebos.com/kunlun2aiak_output/1231/xpytorch-cp310-torch251-ubuntu2004-x64.run
       
