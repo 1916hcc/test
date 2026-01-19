@@ -107,7 +107,7 @@ jobs:
               --no-enable-chunked-prefill \
               --distributed-executor-backend mp \
               --served-model-name Qwen3-VL-30B-A3B-Instruct \
-              --compilation-config /workspace/compile.json
+              --compilation-config \"\$(cat /workspace/compile.json)\"
           "
 
 
