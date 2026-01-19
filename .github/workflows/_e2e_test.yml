@@ -32,7 +32,7 @@ jobs:
       - name: create docker
         run: |
           sudo bash /workspace/start_docker.sh create
-          sudo docker exec aiak-hcc-111 bash -c "
+          sudo docker exec aiak-hcc-111 bash -lc "
             echo 'conda activate python310_torch25_cuda' >> ~/.bashrc
           " 
 
@@ -42,7 +42,7 @@ jobs:
             #source /root/miniconda/etc/profile.d/conda.sh
             conda activate python310_torch25_cuda
             conda env list
-            pip uninstall vllm
+            pip uninstall -y vllm
             env | grep -i proxy
             pip install vllm==0.11.0 --no-build-isolation --no-deps --index-url https://pip.baidu-int.com/simple/
           "
