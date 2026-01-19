@@ -39,6 +39,7 @@ jobs:
       - name : Install vLLM 0.11.0
         run: |
           sudo docker exec aiak-hcc-111 bash -c "
+            source /root/miniconda/etc/profile.d/conda.sh
             conda activate python310_torch25_cuda
             conda env list
             pip uninstall vllm
