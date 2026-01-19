@@ -28,165 +28,170 @@ jobs:
       - Linux
       - X64
     steps:
-      - name: Set python310_torch25_cuda as global env
-        run: |
-          ENV=/root/miniconda/envs/python310_torch25_cuda
-          echo "PATH=$ENV/bin:$PATH" >> $GITHUB_ENV
 
-
-
-
-      - name: Check xpu and CANN info
-        run: |
-          xpu-smi
-          which python
-          python -V
-          # cat /usr/local/Ascend/ascend-toolkit/latest/"$(uname -i)"-linux/ascend_toolkit_install.info
-
-      # - name: Config mirrors
-      #   run: |
-      #     apt-get update -y
-          
-
-      - name: Checkout baidu/vllm-kunlun repo
-        uses: actions/checkout@v4
-        with:
-          repository: baidu/vllm-kunlun
-          ref: ${{ inputs.vllm-kunlun }}
-          path: ./vLLM-Kunlun
-          fetch-depth: 1
-      # - name: Install system dependencies
-      #   run: |
-      #     # apt-get -y install `cat packages.txt`
-      #     apt-get -y install gcc g++ cmake libnuma-dev
-
-      - name: Install vllm from PyPI
-        run: |
-          which python
-          python -V
-          
-          
-          export {http,https}_proxy=http://agent.baidu.com:8891
-          pip install vllm==${{ inputs.vllm }} --no-deps --no-build-isolation
-
-      - name: Install vllm-project/vllm-kunlun
+      - name: create docker
         run: |
           ls
-          cd ./vLLM-Kunlun
-          unset http_proxy&&unset https_proxy;
-          pip install -r requirements.txt
 
-          python setup.py build
-          python setup.py install
+      # - name: Set python310_torch25_cuda as global env
+      #   run: |
+      #     ENV=/root/miniconda/envs/python310_torch25_cuda
+      #     echo "PATH=$ENV/bin:$PATH" >> $GITHUB_ENV
 
-          cp vllm_kunlun/patches/eval_frame.py \
-          /root/miniconda/envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
 
-      - name: Install the KL3-customized build of PyTorch(Only MIMO V2)
-        run:
-          unset http_proxy&&unset https_proxy; 
-          wget -O xpytorch-cp310-torch251-ubuntu2004-x64.run https://klx-sdk-release-public.su.bcebos.com/kunlun2aiak_output/1231/xpytorch-cp310-torch251-ubuntu2004-x64.run
-      
-      - name: Install custom ops
-        run: |
-          unset http_proxy&&unset https_proxy;
-          wget -O xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl https://baidu-kunlun-public.su.bcebos.com/v1/baidu-kunlun-share/1130/xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKypXxBzU7gg4Mk4K4c6OYR%2F2025-12-05T06%3A18%3A00Z%2F-1%2Fhost%2F14936c2b7e7c557c1400e4c467c79f7a9217374a7aa4a046711ac4d948f460cd
-          pip install xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl
-      - name: Install custom ops(Only MIMO V2)
-        run: |
-          unset http_proxy&&unset https_proxy;
-          wget -O xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
-          pip install xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl
-      
-      - name: Install the KLX3 custom Triton build && Install the AIAK custom ops library
-        run: |
-          unset http_proxy&&unset https_proxy;
-          wget -O triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/v1/vllm-kunlun-0.11.0/triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
-          pip install triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
-          wget -O xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/XSpeedGate-whl/release_merge/20251219_152418/xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
-          pip install xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
-      - name: Install evalscope && evalscope[perf]
-        run: |
+
+
+      # - name: Check xpu and CANN info
+      #   run: |
+      #     xpu-smi
+      #     which python
+      #     python -V
+      #     # cat /usr/local/Ascend/ascend-toolkit/latest/"$(uname -i)"-linux/ascend_toolkit_install.info
+
+      # # - name: Config mirrors
+      # #   run: |
+      # #     apt-get update -y
           
-          export {http,https}_proxy=http://10.162.37.16:8128
-          export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
-          pip install evalscope
-          pip install 'evalscope[perf]'
+
+      # - name: Checkout baidu/vllm-kunlun repo
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: baidu/vllm-kunlun
+      #     ref: ${{ inputs.vllm-kunlun }}
+      #     path: ./vLLM-Kunlun
+      #     fetch-depth: 1
+      # # - name: Install system dependencies
+      # #   run: |
+      # #     # apt-get -y install `cat packages.txt`
+      # #     apt-get -y install gcc g++ cmake libnuma-dev
+
+      # - name: Install vllm from PyPI
+      #   run: |
+      #     which python
+      #     python -V
+          
+          
+      #     export {http,https}_proxy=http://agent.baidu.com:8891
+      #     pip install vllm==${{ inputs.vllm }} --no-deps --no-build-isolation
+
+      # - name: Install vllm-project/vllm-kunlun
+      #   run: |
+      #     ls
+      #     cd ./vLLM-Kunlun
+      #     unset http_proxy&&unset https_proxy;
+      #     pip install -r requirements.txt
+
+      #     python setup.py build
+      #     python setup.py install
+
+      #     cp vllm_kunlun/patches/eval_frame.py \
+      #     /root/miniconda/envs/python310_torch25_cuda/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
+
+      # - name: Install the KL3-customized build of PyTorch(Only MIMO V2)
+      #   run:
+      #     unset http_proxy&&unset https_proxy; 
+      #     wget -O xpytorch-cp310-torch251-ubuntu2004-x64.run https://klx-sdk-release-public.su.bcebos.com/kunlun2aiak_output/1231/xpytorch-cp310-torch251-ubuntu2004-x64.run
+      
+      # - name: Install custom ops
+      #   run: |
+      #     unset http_proxy&&unset https_proxy;
+      #     wget -O xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl https://baidu-kunlun-public.su.bcebos.com/v1/baidu-kunlun-share/1130/xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl?authorization=bce-auth-v1%2FALTAKypXxBzU7gg4Mk4K4c6OYR%2F2025-12-05T06%3A18%3A00Z%2F-1%2Fhost%2F14936c2b7e7c557c1400e4c467c79f7a9217374a7aa4a046711ac4d948f460cd
+      #     pip install xtorch_ops-0.1.2209%2B6752ad20-cp310-cp310-linux_x86_64.whl
+      # - name: Install custom ops(Only MIMO V2)
+      #   run: |
+      #     unset http_proxy&&unset https_proxy;
+      #     wget -O xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl https://vllm-ai-models.bj.bcebos.com/v1/vLLM-Kunlun/ops/swa/xtorch_ops-0.1.2109%252B523cb26d-cp310-cp310-linux_x86_64.whl
+      #     pip install xtorch_ops-0.1.2109+252B523cb26d-cp310-cp310-linux_x86_64.whl
+      
+      # - name: Install the KLX3 custom Triton build && Install the AIAK custom ops library
+      #   run: |
+      #     unset http_proxy&&unset https_proxy;
+      #     wget -O triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/v1/vllm-kunlun-0.11.0/triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
+      #     pip install triton-3.0.0%2Bb2cde523-cp310-cp310-linux_x86_64.whl
+      #     wget -O xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl https://cce-ai-models.bj.bcebos.com/XSpeedGate-whl/release_merge/20251219_152418/xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
+      #     pip install xspeedgate_ops-0.0.0-cp310-cp310-linux_x86_64.whl
+      # - name: Install evalscope && evalscope[perf]
+      #   run: |
+          
+      #     export {http,https}_proxy=http://10.162.37.16:8128
+      #     export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+      #     pip install evalscope
+      #     pip install 'evalscope[perf]'
         
       
 
 
-      - name: run Qwen2.5-7B 
-        shell: bash
-        run: |
-          unset XPU_DUMMY_EVENT
-          export LD_LIBRARY_PATH=/opt/xpu/lib:$LD_LIBRARY_PATH
-          export PATH=$CONDA_PREFIX/bin:$PATH
-          export XPU_USE_MOE_SORTED_THRES=1
-          export XPU_VISIBLE_DEVICES=6,7
-          export XFT_USE_FAST_SWIGLU=1
-          export XMLIR_CUDNN_ENABLED=1
-          export XPU_USE_DEFAULT_CTX=1
-          export XMLIR_FORCE_USE_XPU_GRAPH=1
-          export XPU_USE_FAST_SWIGLU=1
-          export VLLM_HOST_IP=$(hostname -i)
-          echo "VLLM_HOST_IP: $VLLM_HOST_IP"
-          export XMLIR_ENABLE_MOCK_TORCH_COMPILE=false
-          USE_ORI_ROPE=1
-          VLLM_USE_V1=1
-          nohup python -m vllm.entrypoints.openai.api_server \
-                --host 0.0.0.0 \
-                --port 8356 \
-                --model /ssd1/models/Qwen2.5-7B \
-                --gpu-memory-utilization 0.8 \
-                --trust-remote-code \
-                --max-model-len 8192 \
-                --tensor-parallel-size 1 \
-                --dtype float16 \
-                --max_num_seqs 2048 \
-                --max_num_batched_tokens 8192 \
-                --max-seq-len-to-capture 8192 \
-                --block-size 128 \
-                --no-enable-prefix-caching \
-                --no-enable-chunked-prefill \
-                --distributed-executor-backend mp \
-                --served-model-name Qwen2.5-7B \
-                --enforce_eager true \
-                --compilation-config '{"splitting_ops": ["vllm.unified_attention_with_output_kunlun"]}' \
-                > server.log 2>&1 &
-      - name: Stream server logs
-        run: |
-          nohup tail -f server.log &
+      # - name: run Qwen2.5-7B 
+      #   shell: bash
+      #   run: |
+      #     unset XPU_DUMMY_EVENT
+      #     export LD_LIBRARY_PATH=/opt/xpu/lib:$LD_LIBRARY_PATH
+      #     export PATH=$CONDA_PREFIX/bin:$PATH
+      #     export XPU_USE_MOE_SORTED_THRES=1
+      #     export XPU_VISIBLE_DEVICES=6,7
+      #     export XFT_USE_FAST_SWIGLU=1
+      #     export XMLIR_CUDNN_ENABLED=1
+      #     export XPU_USE_DEFAULT_CTX=1
+      #     export XMLIR_FORCE_USE_XPU_GRAPH=1
+      #     export XPU_USE_FAST_SWIGLU=1
+      #     export VLLM_HOST_IP=$(hostname -i)
+      #     echo "VLLM_HOST_IP: $VLLM_HOST_IP"
+      #     export XMLIR_ENABLE_MOCK_TORCH_COMPILE=false
+      #     USE_ORI_ROPE=1
+      #     VLLM_USE_V1=1
+      #     python -m vllm.entrypoints.openai.api_server \
+      #           --host 0.0.0.0 \
+      #           --port 8356 \
+      #           --model /ssd1/models/Qwen2.5-7B \
+      #           --gpu-memory-utilization 0.8 \
+      #           --trust-remote-code \
+      #           --max-model-len 8192 \
+      #           --tensor-parallel-size 1 \
+      #           --dtype float16 \
+      #           --max_num_seqs 2048 \
+      #           --max_num_batched_tokens 8192 \
+      #           --max-seq-len-to-capture 8192 \
+      #           --block-size 128 \
+      #           --no-enable-prefix-caching \
+      #           --no-enable-chunked-prefill \
+      #           --distributed-executor-backend mp \
+      #           --served-model-name Qwen2.5-7B \
+      #           --enforce_eager true \
+      #           --compilation-config '{"splitting_ops": ["vllm.unified_attention_with_output_kunlun"]}' \2>&1 | tee output_p800.log
+      #           #> server.log 2>&1 &
+      # - name: Stream server logs
+      #   run: |
+      #     nohup tail -f server.log &
       
-      - name: wait for vLLM server ready
-        run: |
-          for i in {1..60}; do
-            if curl -sf http://localhost:8356/v1/models > /dev/null; then
-              echo "vLLM server is ready"
-              exit 0
-            fi
-            echo "waiting for vLLM server..."
-            sleep 5
-          done
+      # - name: wait for vLLM server ready
+      #   run: |
+      #     for i in {1..60}; do
+      #       if curl -sf http://localhost:8356/v1/models > /dev/null; then
+      #         echo "vLLM server is ready"
+      #         exit 0
+      #       fi
+      #       echo "waiting for vLLM server..."
+      #       sleep 5
+      #     done
 
-          echo "vLLM server failed to start"
-          exit 1
-      - name: Accuracy testing
-        run: |
-          evalscope eval \
-            --model Qwen2.5-7B \
-            --api-url http://localhost:8356/v1 \
-            --datasets gsm8k arc \
-            --limit 10
+      #     echo "vLLM server failed to start"
+      #     exit 1
+      # - name: Accuracy testing
+      #   run: |
+      #     evalscope eval \
+      #       --model Qwen2.5-7B \
+      #       --api-url http://localhost:8356/v1 \
+      #       --datasets gsm8k arc \
+      #       --limit 10
 
 
-      - name: Performerance testing
-        run: |
-          evalscope perf \
-            --model Qwen2.5-7B \
-            --url "http://localhost:8356/v1/chat/completions" \
-            --parallel 5 \
-            --number 20 \
-            --api openai \
-            --dataset openqa \
-            --stream
+      # - name: Performerance testing
+      #   run: |
+      #     evalscope perf \
+      #       --model Qwen2.5-7B \
+      #       --url "http://localhost:8356/v1/chat/completions" \
+      #       --parallel 5 \
+      #       --number 20 \
+      #       --api openai \
+      #       --dataset openqa \
+      #       --stream
