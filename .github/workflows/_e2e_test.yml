@@ -32,8 +32,9 @@ jobs:
       - name: create docker
         run: |
           sudo bash /workspace/start_docker.sh create
-          sudo docker exec -it aiak-hcc-111 bash
-          pwd 
+          sudo docker exec aiak-hcc-111 bash -c "
+            pwd
+          " 
 
       # - name: Set python310_torch25_cuda as global env
       #   run: |
