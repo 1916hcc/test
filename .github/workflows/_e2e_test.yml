@@ -66,6 +66,15 @@ jobs:
       #       chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
       #     "
 
+      - name: Install evalscope && evalscope[perf]
+        run: |
+            sudo docker exec -d aiak-hcc-111 bash -lc '
+              export {http,https}_proxy=http://10.162.37.16:8128
+              export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+              pip install evalscope
+              pip install 'evalscope[perf]'
+            '
+
       - name: start server
         run: |
           sudo docker exec -d aiak-hcc-111 bash -lc '
@@ -87,7 +96,9 @@ jobs:
               --no-enable-chunked-prefill \
               --distributed-executor-backend mp \
               --served-model-name Qwen3-VL-30B-A3B-Instruct \
-              --compilation-config '\''{"splitting_ops": ["vllm.unified_attention", "vllm.unified_attention_with_output","vllm.unified_attention_with_output_kunlun","vllm.mamba_mixer2", "vllm.mamba_mixer", "vllm.short_conv", "vllm.linear_attention", "vllm.plamo2_mamba_mixer", "vllm.gdn_attention", "vllm.sparse_attn_indexer"]}'\'''
+              --compilation-config '\''{"splitting_ops": ["vllm.unified_attention", "vllm.unified_attention_with_output","vllm.unified_attention_with_output_kunlun","vllm.mamba_mixer2", "vllm.mamba_mixer", "vllm.short_conv", "vllm.linear_attention", "vllm.plamo2_mamba_mixer", "vllm.gdn_attention", "vllm.sparse_attn_indexer"]}'\''
+              > /workspace/vllm.log 2>&1
+              '
       - name: wait for vllm
         run: |
           sudo docker exec aiak-hcc-111 bash -lc '
@@ -95,6 +106,7 @@ jobs:
               for i in {1..60}; do
                 if curl -sf http://127.0.0.1:8356/v1/models >/dev/null; then
                   echo "vLLM is ready"
+                  tail -n 200 /workspace/vllm.log || true
                   break
                 fi
                 sleep 5
@@ -106,6 +118,25 @@ jobs:
                 exit 1
               fi
           '
+      - name: Accuracy testing
+        run: |
+          evalscope eval \
+            --model Qwen2.5-7B \
+            --api-url http://localhost:8356/v1 \
+            --datasets gsm8k arc \
+            --limit 10
+
+
+      - name: Performerance testing
+        run: |
+          evalscope perf \
+            --model Qwen2.5-7B \
+            --url "http://localhost:8356/v1/chat/completions" \
+            --parallel 5 \
+            --number 20 \
+            --api openai \
+            --dataset openqa \
+            --stream
 
       # - name: Check xpu and CANN info
       #   run: |
