@@ -31,8 +31,7 @@ jobs:
 
       - name: create docker
         run: |
-          cd /workspace
-          sudo bash start_docker.sh create
+          sudo bash /workspace/start_docker.sh create
           sudo docker exec -it aiak-hcc-111 bash
           pwd 
 
