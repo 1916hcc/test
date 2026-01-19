@@ -121,6 +121,8 @@ jobs:
       - name: Accuracy testing
         run: |
           sudo docker exec aiak-hcc-111 bash -lc '
+            export {http,https}_proxy=http://10.162.37.16:8128
+            export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
             evalscope eval \
               --model Qwen2.5-7B \
               --api-url http://localhost:8356/v1 \
@@ -132,6 +134,8 @@ jobs:
       - name: Performerance testing
         run: |
           sudo docker exec aiak-hcc-111 bash -lc '
+            export {http,https}_proxy=http://10.162.37.16:8128
+            export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
             evalscope perf \
               --model Qwen2.5-7B \
               --url "http://localhost:8356/v1/chat/completions" \
