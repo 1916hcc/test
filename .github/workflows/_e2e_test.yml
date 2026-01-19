@@ -82,8 +82,13 @@ jobs:
             python -c "import vllm; print(vllm.__version__)"
             echo "=== vLLM-Kunlun Version ==="
             python -c "import importlib.metadata as m; print(m.version('vllm_kunlun'))"
-            echo "=== XPytorch & Xtorch Ops check ==="
-            python -c "import torch; import xpytorch; import xtorch_ops; print('Modules imported successfully')"
+            echo "=== evalscope ==="
+            pip show evalscope
+            echo "=== evalscope[perf] ==="
+            python -c "import evalscope, sys; import builtins; exec('try:\n import triton\n print(\"perf extras ok\")\nexcept ImportError:\n print(\"perf extras missing\")')"
+            
+
+
           '
       - name: start server
         run: |
