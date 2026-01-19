@@ -120,23 +120,27 @@ jobs:
           '
       - name: Accuracy testing
         run: |
-          evalscope eval \
-            --model Qwen2.5-7B \
-            --api-url http://localhost:8356/v1 \
-            --datasets gsm8k arc \
-            --limit 10
+          sudo docker exec aiak-hcc-111 bash -lc '
+            evalscope eval \
+              --model Qwen2.5-7B \
+              --api-url http://localhost:8356/v1 \
+              --datasets gsm8k arc \
+              --limit 10
+          '
 
 
       - name: Performerance testing
         run: |
-          evalscope perf \
-            --model Qwen2.5-7B \
-            --url "http://localhost:8356/v1/chat/completions" \
-            --parallel 5 \
-            --number 20 \
-            --api openai \
-            --dataset openqa \
-            --stream
+          sudo docker exec aiak-hcc-111 bash -lc '
+            evalscope perf \
+              --model Qwen2.5-7B \
+              --url "http://localhost:8356/v1/chat/completions" \
+              --parallel 5 \
+              --number 20 \
+              --api openai \
+              --dataset openqa \
+              --stream
+          '
 
       # - name: Check xpu and CANN info
       #   run: |
