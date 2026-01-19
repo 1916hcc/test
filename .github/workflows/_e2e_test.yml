@@ -159,7 +159,7 @@ jobs:
           '
       - name: Upload evalscope reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: evalscope-reports-${{ github.run_id }}
           path: |
@@ -168,7 +168,7 @@ jobs:
 
       - name: Upload vLLM log
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: vllm-log-${{ github.run_id }}
           path: /workspace/vllm.log
