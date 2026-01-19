@@ -33,13 +33,15 @@ jobs:
         run: |
           sudo bash /workspace/start_docker.sh create
           sudo docker exec aiak-hcc-111 bash -c "
-            pwd
+            echo 'conda activate python310_torch25_cuda' >> ~/.bashrc
           " 
 
-      # - name: Set python310_torch25_cuda as global env
-      #   run: |
-      #     ENV=/root/miniconda/envs/python310_torch25_cuda
-      #     echo "PATH=$ENV/bin:$PATH" >> $GITHUB_ENV
+      - name : Install vLLM 0.11.0
+        run: |
+          sudo docker exec aiak-hcc-111 bash -c "
+            pip uninstall vllm
+            pip install vllm==0.10.1.1 --no-build-isolation --no-deps --index-url https://pip.baidu-int.com/simple/
+          "
 
 
 
