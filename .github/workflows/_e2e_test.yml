@@ -307,6 +307,7 @@ jobs:
             git rev-parse HEAD
             git log -1 --oneline
             unset http_proxy&&unset https_proxy
+            cd vLLM-Kunlun
             pip install -r requirements.txt
             python setup.py build
             python setup.py install
