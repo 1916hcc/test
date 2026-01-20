@@ -243,19 +243,24 @@ jobs:
           main $@
           EOF
           chmod +x start_docker.sh
+          cat start_docker.sh
  
       - name: set config
         run: |
+          cd /workspace
           cat > .config.release << 'EOF'
           DOCKER_NAME=aiak-e2e-single
           IMAGE_NAME=iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32
           EOF
 
           cat .config.release
+          hostname
+          uname -a
 
       - name: create docker
         run: |
           sudo bash /workspace/start_docker.sh create
+          cat start_docker.sh
           sudo docker exec aiak-e2e-single bash -lc "
             echo 'conda activate python310_torch25_cuda' >> ~/.bashrc
           " 
