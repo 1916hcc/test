@@ -251,6 +251,8 @@ jobs:
           IMAGE_NAME=iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32
           EOF
 
+          cat .config.release
+
       - name: create docker
         run: |
           sudo bash /workspace/start_docker.sh create
