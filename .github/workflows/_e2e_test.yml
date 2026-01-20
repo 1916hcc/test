@@ -135,7 +135,7 @@ jobs:
                   --user=root \
                   --name=$NAME \
                   -v /home:/home \
-                  -v /workspace:/workspace \
+                  -v /home/users/v_huchenchao/workspace:/workspace \
                   -v /ssd2:/ssd2 \
                   -v /ssd1:/ssd1 \
                   -v /ssd3:/ssd3 \
@@ -300,9 +300,15 @@ jobs:
             cd /workspace
             export {http,https}_proxy=http://agent.baidu.com:8891
             rm -rf vLLM-Kunlun
-            git clone https://github.com/baidu/vLLM-Kunlun
-            unset http_proxy&&unset https_proxy
-            cd vLLM-Kunlun
+            #git clone https://github.com/baidu/vLLM-Kunlun
+            #unset http_proxy&&unset https_proxy
+            #cd vLLM-Kunlun
+            cd $GITHUB_WORKSPACE
+
+            echo '===== USING PR CODE ====='
+            git rev-parse HEAD
+            git log -1 --oneline
+            
             pip install -r requirements.txt
             python setup.py build
             python setup.py install
