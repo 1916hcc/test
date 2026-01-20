@@ -246,7 +246,7 @@ jobs:
  
       - name: set config
         run: |
-          cat > .config.release <<EOF
+          cat > .config.release << 'EOF'
           DOCKER_NAME=aiak-e2e-single
           IMAGE_NAME=iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32
           EOF
