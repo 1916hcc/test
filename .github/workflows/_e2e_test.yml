@@ -33,8 +33,6 @@ jobs:
           cd /workspace
           cat << 'EOF' > start_docker.sh
 
-          #!/usr/bin/env bash
-
           ME_PREFIX="aiak"
 
           IMAGE="iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32"
@@ -260,7 +258,7 @@ jobs:
       - name: create docker
         run: |
           sudo bash /workspace/start_docker.sh create
-          cat start_docker.sh
+          cat /workspace/start_docker.sh
           sudo docker exec aiak-e2e-single bash -lc "
             echo 'conda activate python310_torch25_cuda' >> ~/.bashrc
           " 
