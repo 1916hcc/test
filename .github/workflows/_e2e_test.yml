@@ -4,19 +4,19 @@ on:
   workflow_call:
     inputs:
       vllm-e2e:
-        required: true
+        required: False
         type: string
       runner-e2e:
-        required: true
+        required: False
         type: string
       image-e2e:
-        required: true
+        required: False
         type: string
       type-e2e:
-        required: true
+        required: False
         type: string
       vllm-kunlun-e2e:
-        required: true
+        required: False
         type: string
 
 
