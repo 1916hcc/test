@@ -33,21 +33,21 @@ jobs:
       - name:
         run: |
           pwd
-      # - name: Checkout PR code
-      #   uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: 0
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
-      # - name: Verify PR workspace
-      #   run: |
-      #     echo "===== WORKSPACE ====="
-      #     pwd
-      #     ls -l
+      - name: Verify PR workspace
+        run: |
+          echo "===== WORKSPACE ====="
+          pwd
+          ls -l
 
-      #     echo "===== GIT INFO ====="
-      #     git rev-parse HEAD
-      #     git log -1 --oneline
-      #     git status --porcelain
+          echo "===== GIT INFO ====="
+          git rev-parse HEAD
+          git log -1 --oneline
+          git status --porcelain
       # - name: create start_docker
       #   run: |
       #     cd /workspace
