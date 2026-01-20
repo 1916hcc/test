@@ -43,7 +43,7 @@ jobs:
         run: |
           pwd
           ls -l
-          cd /workspace/vLLM-Kunlun
+          cd "$GITHUB_WORKSPACE/vLLM-Kunlun"
           echo "==== PR commit ===="
           git rev-parse HEAD
           git log -1 --oneline
@@ -113,7 +113,7 @@ jobs:
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc "
             conda activate python310_torch25_cuda
-            cd /workspace/vLLM-Kunlun
+            cd "$GITHUB_WORKSPACE/vLLM-Kunlun"
 
             echo '==== Using PR code ===='
             git rev-parse HEAD
