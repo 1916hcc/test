@@ -32,7 +32,6 @@ jobs:
         run: |
           cd /workspace
           cat << 'EOF' > start_docker.sh
-
           ME_PREFIX="aiak"
 
           IMAGE="iregistry.baidu-int.com/xmlir/xmlir_ubuntu_2004_x86_64:v0.32"
@@ -46,7 +45,7 @@ jobs:
               local IMAGE=$(get_imagename)
               local NAME=$(get_dockername)
           
-              
+              # 步骤1: 确认宿主机CUDA库路径
               local HOST_CUDA_LIB_PATH=""
               for path in "/usr/local/cuda/lib64" "/usr/local/cuda-*/lib64"; do
                   if [ -d "$(echo $path)" ]; then
@@ -61,31 +60,31 @@ jobs:
                   echo "✓ 检测到宿主机CUDA库路径: $HOST_CUDA_LIB_PATH"
               fi
           
-              
+              # 步骤2: 精确匹配NVIDIA设备 (避免nvidia-caps等特殊文件)
               DEVICE_ARGS=""
               if [ -e "/dev/nvidia0" ]; then
-                  
+                  # 步骤2.1: 获取NVIDIA控制设备
                   DEVICE_ARGS="--device /dev/nvidia0:/dev/nvidia0"
                   
-                  
+                  # 步骤2.2: 获取其他GPU设备 (限定只匹配数字后缀设备)
                   for i in $(seq 1 16); do
                       if [ -e "/dev/nvidia$i" ]; then
                           DEVICE_ARGS="$DEVICE_ARGS --device /dev/nvidia$i:/dev/nvidia$i"
                       fi
                   done
                   
-                  
+                  # 步骤2.3: 添加必要的nvidia-uvm设备
                   if [ -e "/dev/nvidia-uvm" ]; then
                       DEVICE_ARGS="$DEVICE_ARGS --device /dev/nvidia-uvm:/dev/nvidia-uvm"
                   fi
                   
-                  
+                  # 步骤2.4: 添加必要的nvidia-modeset设备
                   if [ -e "/dev/nvidia-modeset" ]; then
                       DEVICE_ARGS="$DEVICE_ARGS --device /dev/nvidia-modeset:/dev/nvidia-modeset"
                   fi
               fi
           
-              
+              # 新增: 挂载nvidia-smi二进制文件
               NVIDIA_BIN=""
               if [ -f "/usr/bin/nvidia-smi" ]; then
                   NVIDIA_BIN="-v /usr/bin/nvidia-smi:/usr/bin/nvidia-smi"
@@ -117,7 +116,6 @@ jobs:
                   --name=$NAME \
                   -v /home:/home \
                   -v /workspace:/workspace \
-                  -v /home/users/v_huchenchao/workspace:/workspace \
                   -v /ssd2:/ssd2 \
                   -v /ssd1:/ssd1 \
                   -v /ssd3:/ssd3 \
@@ -241,7 +239,8 @@ jobs:
           main $@
           EOF
           chmod +x start_docker.sh
-          cat start_docker.sh
+ 
+
  
       - name: set config
         run: |
