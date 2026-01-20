@@ -3,36 +3,34 @@ name: 'e2e-test'
 on:
   workflow_call:
     inputs:
-      vllm:
+      vllm-e2e:
         required: true
         type: string
-      runner:
+      runner-e2e:
         required: true
         type: string
-      image:
+      image-e2e:
         required: true
         type: string
-      type:
+      type-e2e:
         required: true
         type: string
-      vllm-kunlun:
+      vllm-kunlun-e2e:
         required: true
         type: string
 
 
 jobs:
   e2e:
-    name: singlecard
+    name: e2e-test-singlecard
     runs-on: 
       - self-hosted
       - Linux
       - X64
     steps:
-
-
-      - name:
+      - name: Make /workspace writable to avoid cleanup failure
         run: |
-          pwd
+          sudo chmod -R 777 /workspace
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
@@ -365,7 +363,7 @@ jobs:
               --distributed-executor-backend mp \
               --served-model-name Qwen3-VL-30B-A3B-Instruct \
               --compilation-config '\''{"splitting_ops": ["vllm.unified_attention", "vllm.unified_attention_with_output","vllm.unified_attention_with_output_kunlun","vllm.mamba_mixer2", "vllm.mamba_mixer", "vllm.short_conv", "vllm.linear_attention", "vllm.plamo2_mamba_mixer", "vllm.gdn_attention", "vllm.sparse_attn_indexer"]}'\''
-              2>&1 | tee /workspace/vllm.log
+              > /workspace/vllm.log 2>&1
               '
       - name: wait for vllm
         run: |
