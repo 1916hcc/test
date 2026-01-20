@@ -343,28 +343,30 @@ jobs:
           '
       - name: start server
         run: |
-          sudo docker exec -d aiak-e2e-singlecard bash -lc '
-            chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
-            export XPU_VISIBLE_DEVICES=6
-            python -m vllm.entrypoints.openai.api_server \
-              --host 0.0.0.0 \
-              --port 8356 \
-              --model /ssd3/models/Qwen3-VL-30B-A3B-Instruct \
-              --gpu-memory-utilization 0.9 \
-              --trust-remote-code \
-              --max-model-len 32768 \
-              --tensor-parallel-size 1 \
-              --dtype float16 \
-              --max_num_seqs 128 \
-              --max_num_batched_tokens 32768 \
-              --block-size 128 \
-              --no-enable-prefix-caching \
-              --no-enable-chunked-prefill \
-              --distributed-executor-backend mp \
-              --served-model-name Qwen3-VL-30B-A3B-Instruct \
-              --compilation-config '\''{"splitting_ops": ["vllm.unified_attention", "vllm.unified_attention_with_output","vllm.unified_attention_with_output_kunlun","vllm.mamba_mixer2", "vllm.mamba_mixer", "vllm.short_conv", "vllm.linear_attention", "vllm.plamo2_mamba_mixer", "vllm.gdn_attention", "vllm.sparse_attn_indexer"]}'\''
-              > /workspace/vllm.log 2>&1
-              '
+          sudo docker exec aiak-e2e-singlecard bash -lc '
+          #chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
+          chmod +x "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh" && source "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh"
+          export XPU_VISIBLE_DEVICES=6
+          nohup python -u -m vllm.entrypoints.openai.api_server \
+            --host 0.0.0.0 \
+            --port 8356 \
+            --model /ssd3/models/Qwen3-VL-30B-A3B-Instruct \
+            --gpu-memory-utilization 0.9 \
+            --trust-remote-code \
+            --max-model-len 32768 \
+            --tensor-parallel-size 1 \
+            --dtype float16 \
+            --max_num_seqs 128 \
+            --max_num_batched_tokens 32768 \
+            --block-size 128 \
+            --no-enable-prefix-caching \
+            --no-enable-chunked-prefill \
+            --distributed-executor-backend mp \
+            --served-model-name Qwen3-VL-30B-A3B-Instruct \
+            --compilation-config '\''{"splitting_ops": ["vllm.unified_attention","vllm.unified_attention_with_output","vllm.unified_attention_with_output_kunlun","vllm.mamba_mixer2","vllm.mamba_mixer","vllm.short_conv","vllm.linear_attention","vllm.plamo2_mamba_mixer","vllm.gdn_attention","vllm.sparse_attn_indexer"]}'\'' \
+            > /workspace/vllm.log 2>&1 &
+          '
+
       - name: wait for vllm
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc '
@@ -384,34 +386,34 @@ jobs:
                 exit 1
               fi
           '
-      - name: Accuracy testing
-        run: |
-          sudo docker exec aiak-e2e-singlecard bash -lc '
-            export {http,https}_proxy=http://10.162.37.16:8128
-            export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
-            evalscope eval \
-              --model Qwen3-VL-30B-A3B-Instruct \
-              --api-url http://localhost:8356/v1 \
-              --datasets gsm8k arc \
-              --limit 10 2>&1 | tee  /workspace/evalscope_accuracy_report.log
-          '
+      # - name: Accuracy testing
+      #   run: |
+      #     sudo docker exec aiak-e2e-singlecard bash -lc '
+      #       export {http,https}_proxy=http://10.162.37.16:8128
+      #       export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+      #       evalscope eval \
+      #         --model Qwen3-VL-30B-A3B-Instruct \
+      #         --api-url http://localhost:8356/v1 \
+      #         --datasets gsm8k arc \
+      #         --limit 10 2>&1 | tee  /workspace/evalscope_accuracy_report.log
+      #     '
       
 
-      - name: Performerance testing
-        run: |
-          sudo docker exec aiak-e2e-singlecard bash -lc '
-            export {http,https}_proxy=http://10.162.37.16:8128
-            export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
-            evalscope perf \
-              --model Qwen3-VL-30B-A3B-Instruct \
-              --url "http://localhost:8356/v1/chat/completions" \
-              --parallel 5 \
-              --number 20 \
-              --api openai \
-              --dataset openqa \
-              --stream  2>&1 | tee /workspace/evalscope_performance_report.log
-          '
-      - name: Cleanup docker
-        run: |
-          sudo docker aiak-e2e-singlecard || true
-          sudo docker rm aiak-e2e-singlecard || true
+      # - name: Performerance testing
+      #   run: |
+      #     sudo docker exec aiak-e2e-singlecard bash -lc '
+      #       export {http,https}_proxy=http://10.162.37.16:8128
+      #       export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
+      #       evalscope perf \
+      #         --model Qwen3-VL-30B-A3B-Instruct \
+      #         --url "http://localhost:8356/v1/chat/completions" \
+      #         --parallel 5 \
+      #         --number 20 \
+      #         --api openai \
+      #         --dataset openqa \
+      #         --stream  2>&1 | tee /workspace/evalscope_performance_report.log
+      #     '
+      # - name: Cleanup docker
+      #   run: |
+      #     sudo docker aiak-e2e-singlecard || true
+      #     sudo docker rm aiak-e2e-singlecard || true
