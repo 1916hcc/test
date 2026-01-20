@@ -321,7 +321,7 @@ jobs:
 
 
 
-            chmod +x "$GITHUB_WORKSPACE/setup_env.sh" && source "$GITHUB_WORKSPACE/setup_env.sh"
+            chmod +x "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh" && source "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh"
           "
 
       - name: Install evalscope && evalscope[perf]
