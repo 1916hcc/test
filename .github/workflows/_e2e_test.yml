@@ -370,7 +370,6 @@ jobs:
       - name: wait for vllm
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc '
-            rm -rf /workspace/vllm.log
             echo "Waiting for vLLM..."
               for i in {1..90}; do
                 if curl -sf http://127.0.0.1:8356/v1/models >/dev/null; then
