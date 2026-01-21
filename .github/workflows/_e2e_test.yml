@@ -347,7 +347,7 @@ jobs:
           #chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
           chmod +x "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh" && source "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh"
           export XPU_VISIBLE_DEVICES=6
-          python -u -m vllm.entrypoints.openai.api_server \
+          nohup python -u -m vllm.entrypoints.openai.api_server \
             --host 0.0.0.0 \
             --port 8356 \
             --model /ssd3/models/Qwen3-VL-30B-A3B-Instruct \
