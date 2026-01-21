@@ -325,7 +325,7 @@ jobs:
       - name: Install evalscope && evalscope[perf]
         run: |
             sudo docker exec  aiak-e2e-singlecard bash -lc '
-              export {http,https}_proxy=http://10.162.37.16:8128
+              export {http,https}_proxy=http://agent.baidu.com:8891
               export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
               pip install evalscope
               pip install 'evalscope[perf]'
@@ -420,6 +420,7 @@ jobs:
               --stream  2>&1 | tee /workspace/evalscope_performance_report.log
           '
       - name: Cleanup docker
+        if: always()
         run: |
-          sudo docker aiak-e2e-singlecard || true
+          sudo docker stop aiak-e2e-singlecard || true
           sudo docker rm aiak-e2e-singlecard || true
