@@ -394,7 +394,7 @@ jobs:
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc '
             rm -rf /workspace/evalscope_accuracy_report.log
-            export {http,https}_proxy=http://10.162.37.16:8128
+            export {http,https}_proxy=http://agent.baidu.com:8891
             export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
             evalscope eval \
               --model Qwen3-VL-30B-A3B-Instruct \
@@ -408,7 +408,7 @@ jobs:
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc '
             rm -rf /workspace/evalscope_performance_report.log
-            export {http,https}_proxy=http://10.162.37.16:8128
+            export {http,https}_proxy=http://agent.baidu.com:8891
             export NO_PROXY=localhost,127.0.0.1,::1 && export no_proxy=localhost,127.0.0.1,::1
             evalscope perf \
               --model Qwen3-VL-30B-A3B-Instruct \
