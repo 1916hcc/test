@@ -343,7 +343,7 @@ jobs:
       #     '
       - name: start server
         run: |
-          sudo docker exec aiak-e2e-singlecard bash -lc '
+          sudo docker exec -d aiak-e2e-singlecard bash -lc '
           #chmod +x /workspace/vLLM-Kunlun/setup_env.sh && source /workspace/vLLM-Kunlun/setup_env.sh
           chmod +x "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh" && source "$GITHUB_WORKSPACE/vLLM-Kunlun/setup_env.sh"
           export XPU_VISIBLE_DEVICES=7
