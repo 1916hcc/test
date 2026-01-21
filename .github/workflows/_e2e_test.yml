@@ -387,6 +387,9 @@ jobs:
                 exit 1
               fi
           '
+      - name: Follow logs in CI
+        run: |
+          sudo docker logs --tail 500 aiak-e2e-singlecard
       - name: Accuracy testing
         run: |
           sudo docker exec aiak-e2e-singlecard bash -lc '
