@@ -30,7 +30,7 @@ jobs:
       
       - name: Verify PR workspace
         run: |
-          echo "===== WORKSPACE ====="
+          echo "===== 1WORKSPACE ====="
           pwd
           ls -l
 
