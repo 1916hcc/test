@@ -34,10 +34,6 @@ sudo docker exec "${DOCKER_NAME}" bash -lc "
   # patch torch dynamo eval_frame
   cp vllm_kunlun/patches/eval_frame.py /root/miniconda/envs/${CONDA_ENV}/lib/python3.10/site-packages/torch/_dynamo/eval_frame.py
 
-  # xpytorch & ops
-  export http_proxy=${PROXY_URL}
-  export https_proxy=${PROXY_URL}
-
   wget -O xpytorch-cp310-torch251-ubuntu2004-x64.run \"https://baidu-kunlun-public.su.bcebos.com/v1/baidu-kunlun-share/1130/xpytorch-cp310-torch251-ubuntu2004-x64.run?authorization=bce-auth-v1%2FALTAKypXxBzU7gg4Mk4K4c6OYR%2F2025-12-02T05%3A01%3A27Z%2F-1%2Fhost%2Ff3cf499234f82303891aed2bcb0628918e379a21e841a3fac6bd94afef491ff7\"
   bash xpytorch-cp310-torch251-ubuntu2004-x64.run
 
