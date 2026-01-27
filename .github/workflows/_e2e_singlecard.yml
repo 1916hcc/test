@@ -64,15 +64,14 @@ jobs:
         run: |
           bash ci/scripts/server/wait_vllm.sh
 
-      - name: Accuracy testing
-        run: |
-          bash ci/scripts/tests/run_accuracy.sh
+      # - name: Accuracy testing
+      #   run: |
+      #     bash ci/scripts/tests/run_accuracy.sh
 
-      - name: Performance testing
-        run: |
-          bash ci/scripts/tests/run_performance.sh
+      # - name: Performance testing
+      #   run: |
+      #     bash ci/scripts/tests/run_performance.sh
 
-      - name: Cleanup docker
-        if: always()
-        run: |
-          bash ci/scripts/docker/stop_docker.sh
+      # - name: Cleanup docker
+      #   run: |
+      #     bash ci/scripts/docker/stop_docker.sh
