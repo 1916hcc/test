@@ -6,7 +6,7 @@ source ci/scripts/common/log.sh
 
 log "Installing evalscope in container ${DOCKER_NAME}"
 
-sudo docker exec "${DOCKER_NAME}" bash -lc "
+docker exec "${DOCKER_NAME}" bash -lc "
   set -e
   conda activate ${CONDA_ENV}
 

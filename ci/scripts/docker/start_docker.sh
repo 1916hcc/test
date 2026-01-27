@@ -7,10 +7,10 @@ source ci/scripts/common/log.sh
 log "Starting docker container: ${DOCKER_NAME}"
 
 # 如果已经存在同名容器，先清理（幂等）
-if sudo docker ps -a --format '{{.Names}}' | grep -q "^${DOCKER_NAME}$"; then
+if docker ps -a --format '{{.Names}}' | grep -q "^${DOCKER_NAME}$"; then
   log "Container exists, removing first..."
-  sudo docker stop "${DOCKER_NAME}" >/dev/null 2>&1 || true
-  sudo docker rm "${DOCKER_NAME}" >/dev/null 2>&1 || true
+  docker stop "${DOCKER_NAME}" >/dev/null 2>&1 || true
+  docker rm "${DOCKER_NAME}" >/dev/null 2>&1 || true
 fi
 
 # host CUDA libs (可选)
@@ -67,10 +67,10 @@ if [ -d "/usr/lib64" ]; then
 fi
 
 # Ensure libcuda symlink
-sudo ln -sf /usr/lib64/libcuda.so.1 /usr/lib64/libcuda.so || true
+ln -sf /usr/lib64/libcuda.so.1 /usr/lib64/libcuda.so || true
 
 log "docker run ${IMAGE_NAME}"
-sudo docker run \
+docker run \
   -h "$(hostname)" \
   --privileged \
   --net=host \
@@ -96,7 +96,7 @@ sudo docker run \
   -itd "${IMAGE_NAME}"
 
 log "Container started. Inject conda activate into bashrc"
-sudo docker exec "${DOCKER_NAME}" bash -lc "
+docker exec "${DOCKER_NAME}" bash -lc "
   echo 'conda activate ${CONDA_ENV}' >> ~/.bashrc
   conda env list || true
 "
