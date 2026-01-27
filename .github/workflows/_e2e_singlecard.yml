@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Make /workspace writable to avoid cleanup failure
         run: |
-          sudo chmod -R 777 /workspace
+          chmod -R 777 /workspace
 
       - name: Checkout PR code
         uses: actions/checkout@v4
