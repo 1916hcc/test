@@ -86,6 +86,7 @@ docker run \
   -v /usr/lib64/libcuda.so:/usr/lib64/libcuda.so \
   -v /usr/lib64/libnvidia-ml.so.1:/usr/lib64/libnvidia-ml.so.1 \
   -v /usr/lib64/libnvidia-ptxjitcompiler.so.1:/usr/lib64/libnvidia-ptxjitcompiler.so.1 2>/dev/null \
+  -v /var/run/docker.sock:/var/run/docker.sock \
   -w /workspace \
   ${DEVICE_ARGS} \
   ${NVIDIA_BIN} \
