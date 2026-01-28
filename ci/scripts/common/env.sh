@@ -25,4 +25,4 @@ export WORKSPACE_MOUNT="${WORKSPACE_MOUNT:-/home/E2E/workspace:/workspace}"
 # 日志路径
 export VLLM_LOG="${VLLM_LOG:-/workspace/vllm.log}"
 export ACC_LOG="${ACC_LOG:-/workspace/evalscope_accuracy_report.log}"
-export PERF_LOG="${PERF_LOG:-/workspace/evalscope_performance_report.log}"
+export PERF_LOG="${PERF_LOG:-/workspace/benchmark_performance_report.log}"

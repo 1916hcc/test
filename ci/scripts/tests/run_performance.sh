@@ -1,9 +1,9 @@
 source ci/scripts/common/env.sh
 source ci/scripts/common/log.sh
 
-log "Running accuracy test via evalscope"
+log "Running performance test via bench"
 
-docker exec "${DOCKER_NAME}" bash -lc "
+docker exec "${DOCKER_NAME}" bash -c "
     #!/bin/bash
     # ==========================================
     # 1. Define test dimensions
