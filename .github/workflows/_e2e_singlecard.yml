@@ -21,12 +21,7 @@ jobs:
       - X64
 
     steps:
-      # - name: Make /workspace writable to avoid cleanup failure
-      #   run: |
-
-      #     chmod -R 777 /workspace
-      #     chmod -R 777
-
+      
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
@@ -45,18 +40,6 @@ jobs:
       - name: Start docker
         run: |
           bash ci/scripts/docker/start_docker.sh
-
-      # - name: Install vLLM
-      #   run: |
-      #     bash ci/scripts/env/install_vllm.sh
-
-      # - name: Install vLLM-kunlun (PR code)
-      #   run: |
-      #     bash ci/scripts/env/install_kunlun.sh
-
-      # - name: Install evalscope
-      #   run: |
-      #     bash ci/scripts/env/install_evalscope.sh
 
       - name: Install enviroments
         run: |
@@ -77,7 +60,13 @@ jobs:
       - name: Performance testing
         run: |
           bash ci/scripts/tests/run_performance.sh
+      
+      - name: Set permissions
+        if: always()
+        run: |
+          bash ci/scripts/docker/set_permissions.sh
 
       - name: Cleanup docker
+        if: always()
         run: |
           bash ci/scripts/docker/stop_docker.sh
