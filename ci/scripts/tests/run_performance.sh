@@ -3,7 +3,7 @@ source ci/scripts/common/log.sh
 
 log "Running performance test via bench"
 
-docker exec "${DOCKER_NAME}" bash -c "
+docker exec "${DOCKER_NAME}" bash -c '
     #!/bin/bash
     # ==========================================
     # 1. Define test dimensions
@@ -72,6 +72,6 @@ docker exec "${DOCKER_NAME}" bash -c "
             --ignore-eos
     done
 
-"
+'
 
 
