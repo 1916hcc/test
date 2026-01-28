@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
+set -eo pipefail
 source ci/scripts/common/env.sh
 source ci/scripts/common/log.sh
 
 log "Running performance test via bench"
 
-docker exec '${DOCKER_NAME}' bash -lc "
+docker exec "${DOCKER_NAME}" bash -lc "
+
     source /root/miniconda/etc/profile.d/conda.sh
     conda activate ${CONDA_ENV}
     #!/bin/bash
