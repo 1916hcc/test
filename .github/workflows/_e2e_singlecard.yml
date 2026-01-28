@@ -21,10 +21,11 @@ jobs:
       - X64
 
     steps:
-      - name: Make /workspace writable to avoid cleanup failure
-        run: |
-          chmod -R 777 /workspace
-          chmod -R 777
+      # - name: Make /workspace writable to avoid cleanup failure
+      #   run: |
+
+      #     chmod -R 777 /workspace
+      #     chmod -R 777
 
       - name: Checkout PR code
         uses: actions/checkout@v4
