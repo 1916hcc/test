@@ -3,7 +3,8 @@ source ci/scripts/common/log.sh
 
 log "Running performance test via bench"
 
-docker exec "${DOCKER_NAME}" bash -c '
+docker exec "${DOCKER_NAME}" bash -lc "
+    conda activate ${CONDA_ENV}
     #!/bin/bash
     # ==========================================
     # 1. Define test dimensions
@@ -13,7 +14,7 @@ docker exec "${DOCKER_NAME}" bash -c '
 
     # ==========================================
     # 2. Define concurrency generation logic (densification strategy)
-    # ==========================================
+    # ============x==============================
     # Use array concatenation to combine different density ranges
     # Syntax: seq [start] [step] [end]
     CONCURRENCIES=(1)
@@ -71,7 +72,5 @@ docker exec "${DOCKER_NAME}" bash -c '
             --tokenizer ${MODEL_PATH} \
             --ignore-eos
     done
-
-'
-
+"
 

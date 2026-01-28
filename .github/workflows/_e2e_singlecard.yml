@@ -66,7 +66,6 @@ jobs:
         run: |
           bash ci/scripts/docker/set_permissions.sh
 
-      - name: Cleanup docker
-        if: always()
-        run: |
-          bash ci/scripts/docker/stop_docker.sh
+      # - name: Cleanup docker
+      #   run: |
+      #     bash ci/scripts/docker/stop_docker.sh
