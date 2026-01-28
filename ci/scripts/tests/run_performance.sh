@@ -3,7 +3,7 @@ source ci/scripts/common/log.sh
 
 log "Running performance test via bench"
 
-docker exec "${DOCKER_NAME}" bash -lc "
+docker exec "${DOCKER_NAME}" bash -lc <<'EOF'
     conda activate ${CONDA_ENV}
     #!/bin/bash
     # ==========================================
@@ -72,5 +72,5 @@ docker exec "${DOCKER_NAME}" bash -lc "
             --tokenizer ${MODEL_PATH} \
             --ignore-eos
     done
-"
+EOF
 
