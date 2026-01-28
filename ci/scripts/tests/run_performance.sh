@@ -1,9 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 source ci/scripts/common/env.sh
 source ci/scripts/common/log.sh
 
 log "Running performance test via bench"
 
-docker exec "${DOCKER_NAME}" bash -lc <<'EOF'
+docker exec '${DOCKER_NAME}' bash -lc "
+    source /root/miniconda/etc/profile.d/conda.sh
     conda activate ${CONDA_ENV}
     #!/bin/bash
     # ==========================================
@@ -72,5 +76,4 @@ docker exec "${DOCKER_NAME}" bash -lc <<'EOF'
             --tokenizer ${MODEL_PATH} \
             --ignore-eos
     done
-EOF
-
+"
