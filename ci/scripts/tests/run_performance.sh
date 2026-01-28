@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -eo pipefail
+bs=""
 source ci/scripts/common/env.sh
 source ci/scripts/common/log.sh
 
