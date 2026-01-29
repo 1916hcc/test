@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source ci/scripts/common/env.sh
+source /ssd1/E2E/common/env.sh
 source ci/scripts/common/log.sh
 
 log "Starting docker container: ${DOCKER_NAME}"
 
-# 如果已经存在同名容器，先清理（幂等）
 if docker ps -a --format '{{.Names}}' | grep -q "^${DOCKER_NAME}$"; then
   log "Container exists, removing first..."
   docker stop "${DOCKER_NAME}" >/dev/null 2>&1 || true
   docker rm "${DOCKER_NAME}" >/dev/null 2>&1 || true
 fi
 
-# host CUDA libs (可选)
 HOST_CUDA_LIB_PATH=""
 for path in "/usr/local/cuda/lib64" /usr/local/cuda-*/lib64; do
   if [ -d "$path" ]; then

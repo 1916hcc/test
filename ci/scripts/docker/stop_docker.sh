@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-source ci/scripts/common/env.sh
+source /ssd1/E2E/common/env.sh
 source ci/scripts/common/log.sh
 
 
