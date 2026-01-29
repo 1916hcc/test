@@ -61,14 +61,7 @@ jobs:
           {
             "model": "Qwen3-8B",
             "messages": [
-              {
-                "role": "system",
-                "content": "Do not output <think> content. Only output the final answer."
-              },
-              {
-                "role": "user",
-                "content": "Who are you?"
-              }
+              { "role": "user", "content": "Who are you?" }
             ],
             "max_tokens": 200,
             "temperature": 0
