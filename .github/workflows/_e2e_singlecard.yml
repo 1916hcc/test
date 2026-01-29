@@ -4,7 +4,7 @@ on:
   workflow_call:
   pull_request:
     branches: [main]
-    types: [closed]
+    types: [opened, synchronize, reopened]
   push:
     branches: [main]
 
