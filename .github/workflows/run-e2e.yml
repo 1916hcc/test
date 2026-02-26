@@ -5,4 +5,4 @@ on:
 
 jobs:
   call-e2e:
-    uses: ./.github/workflows/_e2e_singlecard11q11111.yml
+    uses: ./.github/workflows/_e2e_singl1ecard11q11111.yml
