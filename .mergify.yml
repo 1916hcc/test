@@ -46,12 +46,6 @@ pull_request_rules:
     actions:
       label:
         add: [misc]
-  - name: commit contains [Misc]
-    conditions:
-      - commits~=Misc
-    actions:
-      label:
-        add: [misc]
   - name: commit contains Qwen
     conditions:
       - commits~=Qwen
