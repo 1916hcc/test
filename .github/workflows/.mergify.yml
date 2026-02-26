@@ -1,8 +1,0 @@
-pull_request_rules:
-  - name: add feature label
-    conditions:
-      - head~=^feature/
-    actions:
-      label:
-        add:
-          - feature
