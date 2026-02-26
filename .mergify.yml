@@ -1,6 +1,5 @@
 pull_request_rules:
 
-
   - name: feature branch
     conditions:
       - head~=^feature/
@@ -15,70 +14,60 @@ pull_request_rules:
       label:
         add: [bug]
 
-
   - name: commit contains refactor
     conditions:
-      - commit~= (?i)\brefactor\b
+      - commits~=Feature
     actions:
       label:
         add: [feature]
-
   - name: commit contains fix
     conditions:
-      - commit~= (?i)\bfix\b
+      - commits~=fix
     actions:
       label:
         add: [bug]
-
-  - name: commit contains ci or build
+  - name: commit contains CI/Build
     conditions:
-      - commit~= (?i)\b(ci|build)\b
+      - commits~=CI/Build
     actions:
       label:
         add: [ci]
-
-  - name: commit contains doc
+  - name: commit contains Doc
     conditions:
-      - commit~= (?i)\b(doc|docs|documentation)\b
+      - commits~=Doc
     actions:
       label:
         add: [documentation]
-
-  - name: commit contains misc
+  - name: commit contains [Misc]
     conditions:
-      - commit~= (?i)\bmisc\b
+      - commits~=Misc
     actions:
       label:
         add: [misc]
-
-  - name: commit contains qwen
+  - name: commit contains Qwen
     conditions:
-      - commit~= (?i)qwen
+      - commits~=Qwen
     actions:
       label:
         add: [qwen]
-
-  - name: commit contains update
+  - name: commit contains Updata
     conditions:
-      - commit~= (?i)\bupdate\b
+      - commits~=Updata
     actions:
       label:
-        add: [update]
-
-  - name: commit contains glm
+        add: [updata]
+  - name: commit contains GLM
     conditions:
-      - commit~= (?i)\bglm\b
+      - commits~=GLM
     actions:
       label:
         add: [glm]
-
   - name: commit contains deepseek
     conditions:
-      - commit~= (?i)deepseek
+      - commits~=deepseek
     actions:
       label:
-        add: [deepseek]
-
+        add: [deepseek]   
 
   - name: docs change
     conditions:
@@ -86,3 +75,4 @@ pull_request_rules:
     actions:
       label:
         add: [documentation]
+  
